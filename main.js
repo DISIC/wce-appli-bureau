@@ -10,9 +10,9 @@ app.commandLine.appendSwitch('disable-site-isolation-trials')
 let mainWindow;
 let wce_url = null;
 
-// console.log('liiiiiiiiiiiiiink=====', process.argv)
-wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-desktop', 'https') : null
+wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
 
+// TODO: transorm links starting with appel.domain to domain
 const whiteListedUrls = ["https://preprod.webconf.numerique.gouv.fr/",
   "https://appel.preprod.webconf.numerique.gouv.fr/",
   "https://webconf.numerique.gouv.fr/",
@@ -23,6 +23,8 @@ function createMainWindow(url) {
     title: 'jitsi',
     width: 1000,
     height: 600,
+    icon: __dirname + '/favicon.ico',
+    autoHideMenuBar: true,
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
@@ -30,7 +32,8 @@ function createMainWindow(url) {
       webSecurity: false
     },
   });
-  // dialog.showErrorBox('Welcome Back', ` ${process.argv[2].replace('wce-desktop', 'https')}`)
+  mainWindow.maximize()
+  // dialog.showErrorBox('Welcome Back', ` ${process.argv[2].replace('wce-appli-bureau', 'https')}`)
 
   // initPopupsConfigurationMain(mainWindow);
   setupAlwaysOnTopMain(mainWindow, null, windowOpenHandler);
@@ -61,10 +64,10 @@ const windowOpenHandler = ({ url, frameName }) => {
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
-    app.setAsDefaultProtocolClient('wce-desktop', process.execPath, [path.resolve(process.argv[1])])
+    app.setAsDefaultProtocolClient('wce-appli-bureau', process.execPath, [path.resolve(process.argv[1])])
   }
 } else {
-  app.setAsDefaultProtocolClient('wce-desktop')
+  app.setAsDefaultProtocolClient('wce-appli-bureau')
 }
 
 const gotTheLock = app.requestSingleInstanceLock()
@@ -87,7 +90,7 @@ if (!gotTheLock) {
 
   app.whenReady().then(() => {
     if (wce_url === null || wce_url.startsWith(whiteListedUrls[0]) || wce_url.startsWith(whiteListedUrls[1]) || wce_url.startsWith(whiteListedUrls[2]) || wce_url.startsWith(whiteListedUrls[3])) {
-      wce_url ? createMainWindow(wce_url) : createMainWindow('http://127.0.0.1:3000');
+      wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr');
     } else {
       dialog.showErrorBox('Welcome', `${wce_url} is not supported`)
     }
@@ -95,7 +98,6 @@ if (!gotTheLock) {
 
 
   app.on('open-url', (event, url) => {
-    console.log('Welcome Back', `You arrived from: ${url}`)
     dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`)
   })
 }

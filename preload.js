@@ -27,14 +27,11 @@ function openExternalLink(url) {
  * @returns {void}
  */
 function setupRenderer(api, options) {
-  console.log('setupRenderer started =====', api);
 
   initPopupsConfigurationRender(api);
 
   const iframe = api._frame;
 
-  console.log('setupRenderer iframe =====', api);
-  console.log('getIFrame', api.getIFrame());
 
   setupScreenSharingRender(api);
 

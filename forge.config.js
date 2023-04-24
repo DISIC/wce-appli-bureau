@@ -1,6 +1,12 @@
 module.exports = {
-  packagerConfig: {},
-  rebuildConfig: {},
+  packagerConfig: {
+    icon: './favicon.ico',
+    name: "WebConf de l'État"
+  },
+  rebuildConfig: {
+    icon: './favicon.ico',
+    name: "WebConf de l'État"
+  },
   makers: [
     {
       name: '@electron-forge/maker-squirrel',

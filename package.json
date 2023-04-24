@@ -1,8 +1,8 @@
 {
-  "name": "jitsi-electron",
-  "productName": "jitsi electron",
+  "name": "wce-appli-bureau",
+  "productName": "WebConf de l'État",
   "version": "1.0.0",
-  "description": "jitsi electron",
+  "description": "WebConf de l'État",
   "main": "main.js",
   "scripts": {
     "start": "electron-forge start",
