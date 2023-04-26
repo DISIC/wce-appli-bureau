@@ -82,9 +82,12 @@ if (!gotTheLock) {
   })
 
 
+
+
+
   app.whenReady().then(() => {
-    //TODO remplacer "wce_url.startsWith(whiteListedUrls[0]) || wce_url.startsWith(whiteListedUrls[1]) ||..." par un code plus propore => boucle qui reprend les éléments du whiteListedUrls. 
-    if (wce_url === null || wce_url.startsWith(whiteListedUrls[0]) || wce_url.startsWith(whiteListedUrls[1]) || wce_url.startsWith(whiteListedUrls[2]) || wce_url.startsWith(whiteListedUrls[3])) {
+    var exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
+    if (wce_url === null || exists) {
       wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr');
     } else {
       dialog.showErrorBox('Welcome', `${wce_url} is not supported`)
