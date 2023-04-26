@@ -13,10 +13,12 @@ let wce_url = null;
 wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
 
 // TODO: transorm links starting with appel.domain to domain
-const whiteListedUrls = ["https://preprod.webconf.numerique.gouv.fr/",
+const whiteListedUrls = [
+  "https://preprod.webconf.numerique.gouv.fr/",
   "https://appel.preprod.webconf.numerique.gouv.fr/",
   "https://webconf.numerique.gouv.fr/",
-  "https://appel.webconf.numerique.gouv.fr/"]
+  "https://appel.webconf.numerique.gouv.fr/"
+]
 
 function createMainWindow(url) {
   mainWindow = new BrowserWindow({
@@ -89,6 +91,7 @@ if (!gotTheLock) {
 
 
   app.whenReady().then(() => {
+    //TODO remplacer "wce_url.startsWith(whiteListedUrls[0]) || wce_url.startsWith(whiteListedUrls[1]) ||..." par un code plus propore => boucle qui reprend les éléments du whiteListedUrls. 
     if (wce_url === null || wce_url.startsWith(whiteListedUrls[0]) || wce_url.startsWith(whiteListedUrls[1]) || wce_url.startsWith(whiteListedUrls[2]) || wce_url.startsWith(whiteListedUrls[3])) {
       wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr');
     } else {
