@@ -9,7 +9,7 @@ let mainWindow;
 let wce_url = null;
 
 wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
-wce_url = wce_url.replace('appel.', '')
+wce_url = typeof process.argv[2] === "string" ? wce_url.replace('appel.', '') : null
 
 const whiteListedUrls = [
   "https://preprod.webconf.numerique.gouv.fr/",
