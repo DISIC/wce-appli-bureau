@@ -1,5 +1,4 @@
 require('dotenv').config();
-const { desktopCapturer, ipcRenderer, contextBridge } = require('electron');
 const {
   RemoteControl,
   setupScreenSharingRender,
@@ -9,41 +8,24 @@ const {
 } = require('@jitsi/electron-sdk');
 
 
-/**
- * Open an external URL.
- *
- * @param {string} url - The URL we with to open.
- * @returns {void}
- */
-function openExternalLink(url) {
-  ipcRenderer.send('jitsi-open-url', url);
-}
-
-/**
- * Setup the renderer process.
- *
- * @param {*} api - API object.
- * @param {*} options - Options for what to enable.
- * @returns {void}
- */
 function setupRenderer(api, options) {
 
   initPopupsConfigurationRender(api);
 
   const iframe = api._frame;
 
-
+  // activer le mode partage d'ecran
   setupScreenSharingRender(api);
 
   if (options.enableRemoteControl) {
-    new RemoteControl(iframe); // eslint-disable-line no-new
+    new RemoteControl(iframe);
   }
 
-  // Allow window to be on top if enabled in settings
+  // permet d'activer la fonctionnalité toujours en dessus.
   if (true) {
     setupAlwaysOnTopRender(api);
   }
-
+  // eviter la mise en veille pendant la conference
   setupPowerMonitorRender(api);
 
 }

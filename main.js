@@ -4,8 +4,6 @@ const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMai
 
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
-// app.commandLine.appendSwitch('disable-features', 'BlockInsecurePrivateNetworkRequests')
-
 
 let mainWindow;
 let wce_url = null;
@@ -20,7 +18,7 @@ const whiteListedUrls = ["https://preprod.webconf.numerique.gouv.fr/",
 
 function createMainWindow(url) {
   mainWindow = new BrowserWindow({
-    title: 'jitsi',
+    title: "WebConférence de l'État",
     width: 1000,
     height: 600,
     icon: __dirname + '/favicon.ico',
@@ -33,14 +31,11 @@ function createMainWindow(url) {
     },
   });
   mainWindow.maximize()
-  // dialog.showErrorBox('Welcome Back', ` ${process.argv[2].replace('wce-appli-bureau', 'https')}`)
 
   // initPopupsConfigurationMain(mainWindow);
   setupAlwaysOnTopMain(mainWindow, null, windowOpenHandler);
   setupPowerMonitorMain(mainWindow);
   setupScreenSharingMain(mainWindow, 'jitsi', 'org.jitsi.jitsi-meet');
-  //mainWindow.loadFile(path.join(__dirname, './renderer/index.html'));
-
   mainWindow.loadURL(url);
 }
 
@@ -75,15 +70,12 @@ const gotTheLock = app.requestSingleInstanceLock()
 if (!gotTheLock) {
   app.quit()
 } else {
-  // wce_url = `${commandLine.pop().slice(0, -1)}`
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    // Someone tried to run a second instance, we should focus our window.
+    // si quelqu'un refait le deeplinking et la fenetre est deja ouverte on fait un focus sur la fenetre actuelle.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
     }
-    // wce_url = `${commandLine.pop().slice(0, -1)}`
-
     dialog.showErrorBox('Welcome Back', `You arrived from: ${commandLine.pop().slice(0, -1)}`)
   })
 
