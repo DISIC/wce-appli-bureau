@@ -78,7 +78,7 @@ if (!gotTheLock) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       mainWindow.focus()
     }
-    dialog.showErrorBox('Welcome Back', `You arrived from: ${commandLine.pop().slice(0, -1)}`)
+    dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
   })
 
 
@@ -90,13 +90,13 @@ if (!gotTheLock) {
     if (wce_url === null || exists) {
       wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr');
     } else {
-      dialog.showErrorBox('Welcome', `${wce_url} is not supported`)
+      dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
     }
   });
 
 
   app.on('open-url', (event, url) => {
-    dialog.showErrorBox('Welcome Back', `You arrived from: ${url}`)
+    dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${url}`)
   })
 }
 
