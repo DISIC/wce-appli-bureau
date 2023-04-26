@@ -9,6 +9,7 @@ let mainWindow;
 let wce_url = null;
 
 wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
+wce_url = wce_url.replace('appel.', '')
 
 // TODO: transorm links starting with appel.domain to domain
 const whiteListedUrls = [
