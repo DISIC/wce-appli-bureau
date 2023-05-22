@@ -1,3 +1,5 @@
+const APP_NAME="WebConférence de l'État";
+
 const path = require('path');
 const { app, BrowserWindow, dialog } = require('electron');
 const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMain, setupPowerMonitorMain } = require('@jitsi/electron-sdk');
@@ -20,7 +22,7 @@ const whiteListedUrls = [
 
 function createMainWindow(url) {
   mainWindow = new BrowserWindow({
-    title: "WebConférence de l'État",
+    title: APP_NAME,
     width: 1000,
     height: 600,
     icon: __dirname + '/favicon.ico',
@@ -37,7 +39,7 @@ function createMainWindow(url) {
   // initPopupsConfigurationMain(mainWindow);
   setupAlwaysOnTopMain(mainWindow, null, windowOpenHandler);
   setupPowerMonitorMain(mainWindow);
-  setupScreenSharingMain(mainWindow, 'jitsi', 'org.jitsi.jitsi-meet');
+  setupScreenSharingMain(mainWindow, APP_NAME, '');
   mainWindow.loadURL(url);
 }
 
@@ -46,7 +48,6 @@ const windowOpenHandler = ({ url, frameName }) => {
 
   if (!target || target === 'browser') {
     openExternalLink(url);
-
     return { action: 'deny' };
   }
 
@@ -56,8 +57,6 @@ const windowOpenHandler = ({ url, frameName }) => {
 
   return { action: 'deny' };
 };
-
-
 
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
@@ -104,10 +103,6 @@ if (!gotTheLock) {
     //dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
   })
 
-
-
-
-
   app.whenReady().then(() => {
     var exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
     if (wce_url === null || exists) {
@@ -117,10 +112,7 @@ if (!gotTheLock) {
     }
   });
 
-
   app.on('open-url', (event, url) => {
     dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${url}`)
   })
 }
-
-
