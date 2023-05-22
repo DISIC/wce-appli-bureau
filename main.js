@@ -73,12 +73,35 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    // si quelqu'un refait le deeplinking et la fenetre est deja ouverte on fait un focus sur la fenetre actuelle.
+    wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
+    wce_url = typeof process.argv[2] === "string" ? wce_url.replace('appel.', '') : null
+    var exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
+    //si quelqu'un refait le deeplinking et la fenetre est deja ouverte on fait un focus sur la fenetre actuelle.
     if (mainWindow) {
       if (mainWindow.isMinimized()) mainWindow.restore()
+      // 
+      // dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
       mainWindow.focus()
+      //app.relaunch({ args: commandLine.pop().slice(0, -1) })
+      if (exists) {
+        app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
+        app.exit(0)
+      } else {
+        app.relaunch()
+        dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
+      }
+
+      // const bounds = mainWindow.getBounds();
+      // console.log("url ==============", commandLine.pop().slice(0, -1))
+      // // Change the URL of the BrowserView
+      // mainWindow.webContents.loadURL(commandLine.pop().slice(0, -1));
+
+      // Restore the bounds of the BrowserView after the new page is loaded
+      //mainWindow.setBounds(bounds);
+    } else {
+
     }
-    dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
+    //dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
   })
 
 
