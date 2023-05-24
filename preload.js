@@ -6,7 +6,16 @@ const {
   initPopupsConfigurationRender,
   setupPowerMonitorRender,
 } = require('@jitsi/electron-sdk');
+const { ipcRenderer } = require('electron')
 
+
+ipcRenderer.on('message', function (evt, message) {
+  console.log("url====", message.url);
+  console.log("href1====", window.location.href)
+  //window.location.href = message.url
+  window.location.replace(message.url)
+  console.log("href2====", window.location.href)
+});
 
 function setupRenderer(api, options) {
 
