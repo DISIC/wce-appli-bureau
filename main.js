@@ -1,9 +1,11 @@
 const path = require('path');
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMain, setupPowerMonitorMain } = require('@jitsi/electron-sdk');
 
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
+
+
 
 let mainWindow;
 let wce_url = null;
@@ -11,11 +13,13 @@ let wce_url = null;
 wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
 wce_url = typeof process.argv[2] === "string" ? wce_url.replace('appel.', '') : null
 
+
+//les liens autorisés par le protocol
 const whiteListedUrls = [
   "https://preprod.webconf.numerique.gouv.fr/",
   "https://appel.preprod.webconf.numerique.gouv.fr/",
   "https://webconf.numerique.gouv.fr/",
-  "https://appel.webconf.numerique.gouv.fr/"
+  "https://appel.webconf.numerique.gouv.fr/",
 ]
 
 function createMainWindow(url) {
@@ -83,21 +87,22 @@ if (!gotTheLock) {
       // dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
       mainWindow.focus()
       //app.relaunch({ args: commandLine.pop().slice(0, -1) })
-      if (exists) {
-        app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
-        app.exit(0)
-      } else {
-        app.relaunch()
-        dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
-      }
+      mainWindow.webContents.send('message', { 'url': commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https') });
+      // if (exists) {
+      //   app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
+      //   app.exit(0)
+      // } else {
+      //   app.relaunch()
+      //   dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
+      // }
 
       // const bounds = mainWindow.getBounds();
       // console.log("url ==============", commandLine.pop().slice(0, -1))
       // // Change the URL of the BrowserView
-      // mainWindow.webContents.loadURL(commandLine.pop().slice(0, -1));
+      // mainWindow.webContents.loadURL(commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https'));
 
-      // Restore the bounds of the BrowserView after the new page is loaded
-      //mainWindow.setBounds(bounds);
+      // //Restore the bounds of the BrowserView after the new page is loaded
+      // mainWindow.setBounds(bounds);
     } else {
 
     }
@@ -109,9 +114,9 @@ if (!gotTheLock) {
 
 
   app.whenReady().then(() => {
-    var exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
+    let exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
     if (wce_url === null || exists) {
-      wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr');
+      wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr/');
     } else {
       dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
     }
