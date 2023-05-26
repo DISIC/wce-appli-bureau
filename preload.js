@@ -8,15 +8,17 @@ const {
 } = require('@jitsi/electron-sdk');
 const { ipcRenderer } = require('electron')
 
-
+// eventListner qui repond à l'eventEmitter second-instance de main.js
 ipcRenderer.on('message', function (evt, message) {
-  console.log("url====", message.url);
-  console.log("href1====", window.location.href)
-  //window.location.href = message.url
   window.location.replace(message.url)
-  console.log("href2====", window.location.href)
 });
 
+/*
+fonction qui active les différentes fonctionnalités.
+@param {Object} api
+@param {Object} options
+@return {void}
+*/
 function setupRenderer(api, options) {
 
   initPopupsConfigurationRender(api);
@@ -39,4 +41,5 @@ function setupRenderer(api, options) {
 
 }
 
+//envoi de la fonction avec l'objet global pour etre utilisé par l'application react
 window.setupRenderer = setupRenderer;

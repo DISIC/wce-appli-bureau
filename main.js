@@ -1,19 +1,23 @@
-const APP_NAME="WebConférence de l'État";
+const APP_NAME = "WebConférence de l'État";
 
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMain, setupPowerMonitorMain } = require('@jitsi/electron-sdk');
 
+//éviter les problèmes de CORS
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
 
-
+//initialisation de l'objet mainWindow
 let mainWindow;
+
+//le lien qui provient du protocol wce-appli-bureau
 let wce_url = null;
 
+//remplacer le protocol par https et si en cas de conférence le lien contient "appel", le lien doit etre normalisé en supprimant "appel."" du lien
 wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
-wce_url = typeof process.argv[2] === "string" ? wce_url.replace('appel.', '') : null
+wce_url = typeof wce_url === "string" ? wce_url.replace('appel.', '') : null
 
 
 //les liens autorisés par le protocol
@@ -21,9 +25,15 @@ const whiteListedUrls = [
   "https://preprod.webconf.numerique.gouv.fr/",
   "https://appel.preprod.webconf.numerique.gouv.fr/",
   "https://webconf.numerique.gouv.fr/",
-  "https://appel.webconf.numerique.gouv.fr/",
+  "https://appel.webconf.numerique.gouv.fr/"
 ]
 
+/*
+fonction qui crée une instance mainWindow à partir de l'url qu'on lui passe
+et active les différentes fonctionnalités.
+@param {string} url
+@return {void}
+*/
 function createMainWindow(url) {
   mainWindow = new BrowserWindow({
     title: APP_NAME,
@@ -38,30 +48,30 @@ function createMainWindow(url) {
       webSecurity: false
     },
   });
+
   mainWindow.maximize()
 
-  // initPopupsConfigurationMain(mainWindow);
-  setupAlwaysOnTopMain(mainWindow, null, windowOpenHandler);
+  setupAlwaysOnTopMain(mainWindow, null, ({ url, frameName }) => {
+    const target = getPopupTarget(url, frameName);
+
+    if (!target || target === 'browser') {
+      openExternalLink(url);
+      return { action: 'deny' };
+    }
+
+    if (target === 'electron') {
+      return { action: 'allow' };
+    }
+
+    return { action: 'deny' };
+  });
   setupPowerMonitorMain(mainWindow);
   setupScreenSharingMain(mainWindow, APP_NAME, '');
   mainWindow.loadURL(url);
 }
 
-const windowOpenHandler = ({ url, frameName }) => {
-  const target = getPopupTarget(url, frameName);
 
-  if (!target || target === 'browser') {
-    openExternalLink(url);
-    return { action: 'deny' };
-  }
-
-  if (target === 'electron') {
-    return { action: 'allow' };
-  }
-
-  return { action: 'deny' };
-};
-
+//initialiser le protocol après la vérification de l'ouverture de l'application avec l'éxecutable
 if (process.defaultApp) {
   if (process.argv.length >= 2) {
     app.setAsDefaultProtocolClient('wce-appli-bureau', process.execPath, [path.resolve(process.argv[1])])
@@ -70,48 +80,44 @@ if (process.defaultApp) {
   app.setAsDefaultProtocolClient('wce-appli-bureau')
 }
 
+//variable qui retourne false si l'application est ouverte en double instance
 const gotTheLock = app.requestSingleInstanceLock()
 
+//ouvrir la seconde instance en remplacant le mainWindow actuel
 if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
-    wce_url = typeof process.argv[2] === "string" ? wce_url.replace('appel.', '') : null
-    var exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
+    // true si le lien qui provient du protocole est autorisé (commence par un des paramètres du tableau whiteListedUrls)
+    let exists
+    if (wce_url !== null) {
+      exists = whiteListedUrls.findIndex((url) => { return wce_url.startsWith(url); })
+    }
     //si quelqu'un refait le deeplinking et la fenetre est deja ouverte on fait un focus sur la fenetre actuelle.
-    if (mainWindow) {
+    if (mainWindow && exists >= 0) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       // 
-      // dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
       mainWindow.focus()
-      //app.relaunch({ args: commandLine.pop().slice(0, -1) })
       mainWindow.webContents.send('message', { 'url': commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https') });
-      // if (exists) {
-      //   app.relaunch({ args: process.argv.slice(1).concat(['--relaunch']) })
-      //   app.exit(0)
-      // } else {
-      //   app.relaunch()
-      //   dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
-      // }
 
-      // const bounds = mainWindow.getBounds();
-      // console.log("url ==============", commandLine.pop().slice(0, -1))
-      // // Change the URL of the BrowserView
-      // mainWindow.webContents.loadURL(commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https'));
-
-      // //Restore the bounds of the BrowserView after the new page is loaded
-      // mainWindow.setBounds(bounds);
     } else {
-
+      dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
     }
-    //dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
   })
 
+  //relance de la première instance
   app.whenReady().then(() => {
-    let exists = whiteListedUrls.findIndex((url) => { return url.startsWith(wce_url); }, wce_url)
-    if (wce_url === null || exists) {
-      wce_url ? createMainWindow(wce_url) : createMainWindow('https://preprod.webconf.numerique.gouv.fr/');
+    // true si le lien qui provient du protocole est autorisé (commence par un des paramètres du tableau whiteListedUrls)
+    let exists
+    if (wce_url !== null) {
+      exists = whiteListedUrls.findIndex((url) => { return wce_url.startsWith(url); })
+    }
+    if (wce_url === null || exists >= 0) {
+      if (exists >= 0) {
+        createMainWindow(wce_url)
+      } else {
+        createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
+      }
     } else {
       dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
     }
