@@ -88,20 +88,23 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
+    wce_url = commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https')
+    //wce_url = typeof wce_url === "string" ? wce_url.replace('appel.', '') : null
     // true si le lien qui provient du protocole est autorisé (commence par un des paramètres du tableau whiteListedUrls)
     let exists
     if (wce_url !== null) {
       exists = whiteListedUrls.findIndex((url) => { return wce_url.startsWith(url); })
+      //dialog.showErrorBox('Bon test', `${wce_url} exist ${exists}`)
     }
     //si quelqu'un refait le deeplinking et la fenetre est deja ouverte on fait un focus sur la fenetre actuelle.
     if (mainWindow && exists >= 0) {
       if (mainWindow.isMinimized()) mainWindow.restore()
       // 
       mainWindow.focus()
-      mainWindow.webContents.send('message', { 'url': commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https') });
+      mainWindow.webContents.send('message', { 'url': wce_url });
 
     } else {
-      dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${commandLine.pop().slice(0, -1)}`)
+      dialog.showErrorBox('Bon retour', `${wce_url} n'est pas supporté `)
     }
   })
 
@@ -123,7 +126,7 @@ if (!gotTheLock) {
     }
   });
 
-  app.on('open-url', (event, url) => {
-    dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${url}`)
-  })
+  // app.on('open-url', (event, url) => {
+  //   dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${url}`)
+  // })
 }
