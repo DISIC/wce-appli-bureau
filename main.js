@@ -88,7 +88,7 @@ if (!gotTheLock) {
   app.quit()
 } else {
   app.on('second-instance', (event, commandLine, workingDirectory) => {
-    wce_url = commandLine.pop().slice(0, 99).replace('wce-appli-bureau', 'https')
+    wce_url = commandLine.pop().slice(0, 99999).replace('wce-appli-bureau', 'https')
     //wce_url = typeof wce_url === "string" ? wce_url.replace('appel.', '') : null
     // true si le lien qui provient du protocole est autorisé (commence par un des paramètres du tableau whiteListedUrls)
     let exists
