@@ -104,7 +104,7 @@ if (!gotTheLock) {
       mainWindow.webContents.send('message', { 'url': wce_url });
 
     } else {
-      dialog.showErrorBox('Bon retour', `${wce_url} n'est pas supporté `)
+      dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
     }
   })
 
@@ -122,7 +122,7 @@ if (!gotTheLock) {
         createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
       }
     } else {
-      dialog.showErrorBox('Bonjour', `${wce_url} n'est pas supporté`)
+      dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
     }
   });
 
