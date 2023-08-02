@@ -3,6 +3,7 @@ const APP_NAME = "WebConférence de l'État";
 const path = require('path');
 const { app, BrowserWindow, dialog, ipcMain } = require('electron');
 const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMain, setupPowerMonitorMain } = require('@jitsi/electron-sdk');
+const { autoUpdater, AppUpdater } = require('electron-updater');
 
 //éviter les problèmes de CORS
 app.commandLine.appendSwitch('ignore-certificate-errors')
@@ -11,6 +12,9 @@ app.commandLine.appendSwitch('disable-site-isolation-trials')
 
 //initialisation de l'objet mainWindow
 let mainWindow;
+
+autoUpdater.autoDownload = true;
+autoUpdater.autoInstallOnAppQuit = true;
 
 //le lien qui provient du protocol wce-appli-bureau
 let wce_url = null;
@@ -124,6 +128,8 @@ if (!gotTheLock) {
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
     }
+
+    autoUpdater.checkForUpdates();
   });
 
   // app.on('open-url', (event, url) => {
