@@ -32,9 +32,9 @@ autoUpdater.autoInstallOnAppQuit = true;
 //   dialog.showErrorBox('download-progress 1.0.3', 'hhh')
 // })
 
-// autoUpdater.on('update-downloded', (info) => {
-//   dialog.showErrorBox('update-downloded 1.0.3', 'hhh')
-// })
+autoUpdater.on('update-downloded', (info) => {
+  dialog.showErrorBox('update-downloded 1.0.1', 'hhh')
+})
 
 //le lien qui provient du protocol wce-appli-bureau
 let wce_url = null;
