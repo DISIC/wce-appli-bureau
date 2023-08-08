@@ -9,11 +9,11 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
-Object.defineProperty(app, 'isPackaged', {
-  get() {
-    return true;
-  }
-});
+// Object.defineProperty(app, 'isPackaged', {
+//   get() {
+//     return true;
+//   }
+// });
 //initialisation de l'objet mainWindow
 let mainWindow;
 
