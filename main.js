@@ -9,31 +9,31 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
-// Object.defineProperty(app, 'isPackaged', {
-//   get() {
-//     return true;
-//   }
-// });
+Object.defineProperty(app, 'isPackaged', {
+  get() {
+    return true;
+  }
+});
 //initialisation de l'objet mainWindow
 let mainWindow;
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
 
-// autoUpdater.on('checking-for-update', () => {
-//   dialog.showErrorBox('checking-for-update', 'hhhh')
-// })
+autoUpdater.on('checking-for-update', () => {
+  console.log('checking-for-update')
+})
 
-// autoUpdater.on('update-available', (info) => {
-//   dialog.showErrorBox('update-available 1.0.3', 'hhh')
-// })
+autoUpdater.on('update-available', (info) => {
+  console.log('update-available 1.0.3', 'hhh')
+})
 
-// autoUpdater.on('download-progress', (info) => {
-//   dialog.showErrorBox('download-progress 1.0.3', 'hhh')
-// })
+autoUpdater.on('download-progress', (info) => {
+  console.log('download-progress 1.0.3', 'hhh')
+})
 
 autoUpdater.on('update-downloded', (info) => {
-  dialog.showErrorBox('update-downloded 1.0.1', 'hhh')
+  console.log('update-downloded 1.0.1', 'hhh')
 })
 
 //le lien qui provient du protocol wce-appli-bureau
