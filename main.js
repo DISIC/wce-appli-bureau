@@ -40,7 +40,7 @@ autoUpdater.on('update-downloded', (info) => {
 let wce_url = null;
 
 //remplacer le protocol par https et si en cas de conférence le lien contient "appel", le lien doit etre normalisé en supprimant "appel."" du lien
-wce_url = typeof process.argv[2] === "string" ? process.argv[2].replace('wce-appli-bureau', 'https') : null
+wce_url = typeof process.argv[1] === "string" ? process.argv[1].replace('wce-appli-bureau', 'https') : null
 wce_url = typeof wce_url === "string" ? wce_url.replace('appel.', '') : null
 
 
