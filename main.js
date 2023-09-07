@@ -75,6 +75,10 @@ function createMainWindow(url) {
 
   mainWindow.maximize()
 
+  mainWindow.on('closed', () => {
+    mainWindow = null;
+  });
+
   setupAlwaysOnTopMain(mainWindow, null, ({ url, frameName }) => {
     const target = getPopupTarget(url, frameName);
 
@@ -138,6 +142,9 @@ if (!gotTheLock) {
     let exists
     if (wce_url !== null) {
       exists = whiteListedUrls.findIndex((url) => { return wce_url.startsWith(url); })
+      if (exists < 0) {
+        wce_url = null
+      }
     }
     if (wce_url === null || exists >= 0) {
       if (exists >= 0) {
