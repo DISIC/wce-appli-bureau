@@ -9,32 +9,10 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
-// Object.defineProperty(app, 'isPackaged', {
-//   get() {
-//     return true;
-//   }
-// });
-//initialisation de l'objet mainWindow
 let mainWindow;
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
-
-autoUpdater.on('checking-for-update', () => {
-  console.log('checking-for-update')
-})
-
-autoUpdater.on('update-available', (info) => {
-  console.log('update-available 1.0.3', 'hhh')
-})
-
-autoUpdater.on('download-progress', (info) => {
-  console.log('download-progress 1.0.3', 'hhh')
-})
-
-autoUpdater.on('update-downloded', (info) => {
-  console.log('update-downloded 1.0.1', 'hhh')
-})
 
 //le lien qui provient du protocol wce-appli-bureau
 let wce_url = null;
@@ -138,28 +116,22 @@ if (!gotTheLock) {
 
   //relance de la première instance
   app.whenReady().then(() => {
+    wce_url = typeof process.argv[1] === "string" ? process.argv[1].replace('wce-appli-bureau', 'https') : null
+    wce_url = typeof wce_url === "string" ? wce_url.replace('appel.', '') : null
+
     // true si le lien qui provient du protocole est autorisé (commence par un des paramètres du tableau whiteListedUrls)
     let exists
     if (wce_url !== null) {
       exists = whiteListedUrls.findIndex((url) => { return wce_url.startsWith(url); })
-      if (exists < 0) {
-        wce_url = null
-      }
     }
-    if (wce_url === null || exists >= 0) {
-      if (exists >= 0) {
-        createMainWindow(wce_url)
-      } else {
-        createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
-      }
+    if (exists >= 0 && wce_url !== null) {
+      createMainWindow(wce_url)
+    } else if (wce_url === null) {
+      createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
     }
 
     autoUpdater.checkForUpdatesAndNotify();
   });
-
-  // app.on('open-url', (event, url) => {
-  //   dialog.showErrorBox('Bon retour', `vous etes arrivé depuis: ${url}`)
-  // })
 }

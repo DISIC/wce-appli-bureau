@@ -1,11 +1,11 @@
 module.exports = {
   packagerConfig: {
     icon: './favicon.ico',
-    name: "WebConf de l'État"
+    name: "WebConférence de l'État"
   },
   rebuildConfig: {
     icon: './favicon.ico',
-    name: "WebConf de l'État"
+    name: "WebConférence de l'État"
   },
   makers: [
     {
