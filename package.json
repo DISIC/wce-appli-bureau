@@ -1,7 +1,7 @@
 {
   "name": "wce-appli-bureau",
   "productName": "WebConférence de l'État",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "WebConférence de l'État",
   "main": "main.js",
   "scripts": {
@@ -47,6 +47,6 @@
   },
   "devDependencies": {
     "electron": "^25.3.2",
-    "electron-builder": "^24.6.3"
+    "electron-builder": "^24.6.4"
   }
 }
