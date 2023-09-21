@@ -1,7 +1,7 @@
 {
   "name": "wce-appli-bureau",
   "productName": "WebConférence de l'État",
-  "version": "1.0.15",
+  "version": "1.0.18",
   "description": "WebConférence de l'État",
   "main": "main.js",
   "scripts": {
@@ -18,7 +18,8 @@
   },
   "build": {
     "appId": "com.webconf",
-    "productName": "webconf",
+    "artifactName": "wce-appli-bureau-Setup-${version}.${ext}",
+    "productName": "WebConférence de l'État",
     "win": {
       "target": [
         {
@@ -33,7 +34,8 @@
     "installerIcon": "fav.ico",
     "uninstallerIcon": "fav.ico",
     "uninstalleDisplayName": "uninstall webconf",
-    "allowToChangeInstallationDirectory": true
+    "allowToChangeInstallationDirectory": true,
+    "artifactName": "wce-appli-bureau-Setup-${version}.${ext}"
   },
   "author": "",
   "license": "MIT",

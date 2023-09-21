@@ -9,6 +9,7 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
+
 let mainWindow;
 
 autoUpdater.autoDownload = true;
