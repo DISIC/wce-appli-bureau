@@ -112,6 +112,7 @@ if (!gotTheLock) {
 
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
+      mainWindow = null
     }
   })
 
@@ -131,6 +132,7 @@ if (!gotTheLock) {
       createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
+      mainWindow = null
     }
 
     autoUpdater.checkForUpdatesAndNotify();
