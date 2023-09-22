@@ -1,7 +1,7 @@
 const APP_NAME = "WebConférence de l'État";
 
 const path = require('path');
-const { app, BrowserWindow, dialog, ipcMain } = require('electron');
+const { app, BrowserWindow, dialog, ipcMain, Notification } = require('electron');
 const { setupScreenSharingMain, initPopupsConfigurationMain, setupAlwaysOnTopMain, setupPowerMonitorMain } = require('@jitsi/electron-sdk');
 const { autoUpdater, AppUpdater } = require('electron-updater');
 
@@ -9,11 +9,20 @@ const { autoUpdater, AppUpdater } = require('electron-updater');
 app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
+const NOTIFICATION_TITLE = "Mise à jour de WebConférence de l'Etat"
+const NOTIFICATION_BODY = "Une nouvelle version est disponible. après la fermeture de l'application, la nouvelle version sera installé automatiquement."
+
+function showNotification() {
+  new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show()
+}
+
 
 let mainWindow;
 
 autoUpdater.autoDownload = true;
 autoUpdater.autoInstallOnAppQuit = true;
+
+autoUpdater.on("update-available", showNotification)
 
 //le lien qui provient du protocol wce-appli-bureau
 let wce_url = null;
