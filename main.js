@@ -146,6 +146,6 @@ if (!gotTheLock) {
       app.exit(0)
     }
 
-    autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.checkForUpdates();
   });
 }
