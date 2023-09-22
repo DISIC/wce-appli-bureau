@@ -113,6 +113,7 @@ if (!gotTheLock) {
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
       mainWindow = null
+      app.exit(0)
     }
   })
 
@@ -133,6 +134,7 @@ if (!gotTheLock) {
     } else {
       dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
       mainWindow = null
+      app.exit(0)
     }
 
     autoUpdater.checkForUpdatesAndNotify();
