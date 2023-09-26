@@ -10,7 +10,7 @@ app.commandLine.appendSwitch('ignore-certificate-errors')
 app.commandLine.appendSwitch('disable-site-isolation-trials')
 
 const NOTIFICATION_TITLE = "Mise à jour de WebConférence de l'Etat"
-const NOTIFICATION_BODY = "Une nouvelle version est disponible. après la fermeture de l'application, la nouvelle version sera installé automatiquement."
+const NOTIFICATION_BODY = "Une nouvelle version est disponible. après la fermeture de l'application, la nouvelle version sera installée automatiquement."
 
 function showNotification() {
   new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show()
