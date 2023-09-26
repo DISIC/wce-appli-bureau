@@ -1,7 +1,7 @@
 {
   "name": "wce-appli-bureau",
   "productName": "WebConférence de l'État",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "WebConférence de l'État",
   "main": "main.js",
   "scripts": {
