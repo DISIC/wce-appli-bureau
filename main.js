@@ -57,7 +57,7 @@ function createMainWindow(url) {
       contextIsolation: false,
       nodeIntegration: true,
       preload: path.join(__dirname, 'preload.js'),
-      webSecurity: false
+      webSecurity: true
     },
   });
 
