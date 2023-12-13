@@ -138,16 +138,14 @@ if (!gotTheLock) {
     }
     if (exists >= 0 && wce_url !== null) {
       createMainWindow(wce_url)
-    } else 
-    //if (wce_url === null) 
-    {
+    } else if (wce_url === null || !wce_url.startsWith('https')) {
       createMainWindow('https://preprod.webconf.numerique.gouv.fr/')
     } 
-    // else {
-    //   dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
-    //   mainWindow = null
-    //   app.exit(0)
-    // }
+    else {
+      dialog.showErrorBox('Erreur', `L'adresse ${wce_url} n'est pas supportée.`)
+      mainWindow = null
+      app.exit(0)
+    }
 
     autoUpdater.checkForUpdates();
   });
