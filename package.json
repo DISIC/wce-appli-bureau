@@ -1,0 +1,54 @@
+{
+  "name": "wce-appli-bureau",
+  "productName": "WebConférence de l'État",
+  "version": "1.0.28",
+  "description": "WebConférence de l'État",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DISIC/wce-appli-bureau"
+  },
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
+  },
+  "build": {
+    "appId": "com.webconf",
+    "artifactName": "wce-appli-bureau-Setup-${version}.${ext}",
+    "productName": "WebConférence de l'État",
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        }
+      ],
+      "icon": "fav.ico"
+    }
+  },
+  "nsis": {
+    "oneClick": true,
+    "installerIcon": "fav.ico",
+    "uninstallerIcon": "fav.ico",
+    "uninstalleDisplayName": "uninstall webconf",
+    "allowToChangeInstallationDirectory": true,
+    "artifactName": "wce-appli-bureau-Setup-${version}.${ext}"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@jitsi/electron-sdk": "^5.0.3",
+    "app-builder-lib": "^24.6.3",
+    "auto-updater": "^1.0.2",
+    "dotenv": "^16.0.3",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^6.1.1"
+  },
+  "devDependencies": {
+    "electron": "^25.3.2",
+    "electron-builder": "^24.6.4"
+  }
+}
